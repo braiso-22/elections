@@ -1,0 +1,8 @@
+services:
+  backend:
+    image: ktor-vota:latest
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
