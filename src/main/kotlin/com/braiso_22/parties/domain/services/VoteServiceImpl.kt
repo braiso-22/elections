@@ -17,7 +17,10 @@ class VoteServiceImpl(
     }
 
     override fun countVotes(): Map<String, Int> {
+        val parties = partyRepository.getAllParties().map { it.id }
         val votes: List<Vote> = voteRepository.getVotes()
-        return votes.groupingBy { it.partyId }.eachCount()
+        return parties.associateWith { partyId ->
+            votes.count { it.partyId == partyId }
+        }
     }
 }
