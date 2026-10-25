@@ -18,3 +18,9 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 jmeter.log
+
+# SQLite (Room)
+*.db
+*.db-shm
+*.db-wal
+*.db.lck

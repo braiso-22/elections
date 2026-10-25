@@ -2,7 +2,7 @@ package com.braiso_22.elections.parties.presentation
 
 import com.braiso_22.elections.boe.data.api.BOEResponse
 import com.braiso_22.elections.boe.data.api.getBoe
-import com.braiso_22.elections.parties.data.PartyRepositoryImpl
+import com.braiso_22.elections.parties.domain.repositories.PartyRepository
 import com.braiso_22.elections.parties.domain.services.PartyService
 import com.braiso_22.elections.parties.domain.services.PartyServiceImpl
 import com.braiso_22.elections.parties.presentation.dtos.PoliticalPartyDTO
@@ -12,9 +12,9 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.partiesRouting() {
+fun Application.partiesRouting(partyRepository: PartyRepository) {
     val partyService: PartyService = PartyServiceImpl(
-        partyRepository = PartyRepositoryImpl()
+        partyRepository = partyRepository
     )
     routing {
         route("/v1") {

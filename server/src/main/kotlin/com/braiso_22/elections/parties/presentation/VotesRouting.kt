@@ -1,7 +1,7 @@
 package com.braiso_22.elections.parties.presentation
 
-import com.braiso_22.elections.parties.data.PartyRepositoryImpl
-import com.braiso_22.elections.parties.data.VoteRepositoryImpl
+import com.braiso_22.elections.parties.domain.repositories.PartyRepository
+import com.braiso_22.elections.parties.domain.repositories.VoteRepository
 import com.braiso_22.elections.parties.domain.services.VoteService
 import com.braiso_22.elections.parties.domain.services.VoteServiceImpl
 import com.braiso_22.elections.parties.presentation.dtos.VoteDTO
@@ -13,10 +13,13 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.votesRouting() {
+fun Application.votesRouting(
+    partyRepository: PartyRepository,
+    voteRepository: VoteRepository,
+) {
     val voteService: VoteService = VoteServiceImpl(
-        partyRepository = PartyRepositoryImpl(),
-        voteRepository = VoteRepositoryImpl()
+        partyRepository = partyRepository,
+        voteRepository = voteRepository
     )
     routing {
         route("/v1") {

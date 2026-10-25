@@ -7,15 +7,15 @@ class PartyServiceImpl(
     private val partyRepository: PartyRepository
 ) : PartyService {
 
-    override fun getAllParties(): List<PoliticalParty> {
+    override suspend fun getAllParties(): List<PoliticalParty> {
         return partyRepository.getAllParties()
     }
 
-    override fun getPartyById(id: String): PoliticalParty? {
+    override suspend fun getPartyById(id: String): PoliticalParty? {
         return partyRepository.getPartyById(id)
     }
 
-    override fun getPartiesByParams(id: String, name: String, acronym: String): List<PoliticalParty> {
+    override suspend fun getPartiesByParams(id: String, name: String, acronym: String): List<PoliticalParty> {
         return partyRepository.getPartiesByParams(id, name, acronym)
     }
 }

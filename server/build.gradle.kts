@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room3)
 }
 
 group = "com.braiso_22.elections"
@@ -24,6 +26,14 @@ dependencies {
     implementation(libs.ktor.clientCore)
     implementation(libs.ktor.clientCio)
     implementation(libs.ktor.clientContentNegotiation)
+    implementation(libs.room3.runtime)
+    implementation(libs.sqlite.bundled)
+    ksp(libs.room3.compiler)
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.kotlin.testJunit)
+    testImplementation(libs.kotlinx.coroutinesTest)
+}
+
+room3 {
+    schemaDirectory("$projectDir/schemas")
 }
