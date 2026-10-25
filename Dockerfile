@@ -1,21 +1,22 @@
-# Creamos una nueva imagen a partir de openjdk:17-jdk-slim
-FROM openjdk:17-jdk-slim
+# Etapa de build: compilamos el módulo :server del proyecto KMP
+FROM eclipse-temurin:21-jdk AS build
 
 COPY . /app
 
 # Nos movemos a la carpeta /app
 WORKDIR /app
-# Ejecutamos el comando ./gradlew distTar
-RUN ./gradlew distTar
+# Generamos la distribución del servidor en server/build/install/server
+RUN ./gradlew :server:installDist --no-daemon
 
-# Creamos un directorio /kotlin dentro de nuestra imagen
-RUN mkdir /kotlin
+# Etapa de ejecución: solo copiamos la distribución generada
+FROM eclipse-temurin:21-jre
 
-# Descomprimimos en la carpeta /kotlin que creamos arriba, el tar que generamos previamenre con ./gradlew distTar
-RUN tar -xvf /app/build/distributions/elections-0.0.1.tar -C /kotlin
+COPY --from=build /app/server/build/install/server /kotlin/server
 
-# WORKDIR es como hace un comando cd, es decir, nos pasamos a /kotlin/app
-WORKDIR /kotlin/elections-0.0.1
+# WORKDIR es como hace un comando cd, es decir, nos pasamos a /kotlin/server
+WORKDIR /kotlin/server
+
+EXPOSE 8080
 
 # Ejecutamos la app
-CMD ["bin/elections"]
+CMD ["bin/server"]

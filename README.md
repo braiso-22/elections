@@ -1,42 +1,53 @@
 # elections
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+This is a Kotlin Multiplatform project targeting Web, Server.
 
-Here are some useful links to get you started:
+* [/app/sharedLogic](./app/sharedLogic/src) is for the code that will be shared between app targets in the project.
+  The most important subfolder is [commonMain](./app/sharedLogic/src/commonMain/kotlin). If preferred, you
+  can add code to the platform-specific folders here too.
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+* [/app/webApp](./app/webApp) contains a React web application. It uses the Kotlin/JS library produced
+  by the [sharedLogic](./app/sharedLogic) module.
 
-## Features
+* [/core](./core/src) is for the code that will be shared between all targets in the project.
+  The most important subfolder is [commonMain](./core/src/commonMain/kotlin). If preferred, you
+  can add code to the platform-specific folders here too.
 
-Here's a list of features included in this project:
+* [/core](./core/src) also contains the elections domain (entities, repositories, services) and the
+  serializable DTOs shared between the server and the clients.
 
-| Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-| [Authentication](https://start.ktor.io/p/auth)                         | Provides extension point for handling the Authorization header                     |
+* [/server](./server/src/main/kotlin) is for the Ktor server application (REST API, in-memory repositories
+  and the BOE API client).
 
-## Building & Running
+### API
 
-To build or run the project, use one of the following tasks:
+| Method | Path                | Description                                                  |
+|--------|---------------------|--------------------------------------------------------------|
+| GET    | `/v1/parties`       | All parties, or filtered by `id`, `name` and `acronym` query params |
+| GET    | `/v1/party/{id}`    | A single party                                               |
+| POST   | `/v1/vote`          | Vote for a party: `{"partyId": "1", "userId": "user"}`       |
+| GET    | `/v1/votes`         | Vote count for every party                                   |
+| GET    | `/v1/boe-parties`   | BOE summary                                                  |
 
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
+A Postman collection ([Elections.postman_collection.json](./Elections.postman_collection.json)) and a JMeter
+test plan ([HTTP Request.jmx](./HTTP%20Request.jmx)) are included.
 
-If the server starts successfully, you'll see the following output:
+### Running the apps
 
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
+Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
 
+- Server: `./gradlew :server:run`
+- Server tests: `./gradlew :server:test`
+- Server with Docker: `docker compose up --build`
+- Web app:
+  1. Install [Node.js](https://nodejs.org/en/download) (which includes `npm`)
+  2. Build and run the web application:
+     ```shell
+     npm run build:shared
+     npm install
+     npm run start
+     ```
+
+---
+
+Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…

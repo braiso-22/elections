@@ -1,9 +1,0 @@
-package com.braiso_22.parties.domain.repositories
-
-import com.braiso_22.parties.domain.entities.PoliticalParty
-
-interface PartyRepository {
-    fun getAllParties(): List<PoliticalParty>
-    fun getPartyById(id: String): PoliticalParty?
-    fun getPartiesByParams(id: String, name: String, acronym: String): List<PoliticalParty>
-}
