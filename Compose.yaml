@@ -4,5 +4,8 @@ services:
     build:
         context: .
         dockerfile: Dockerfile
+    environment:
+        # Ids de votante (token Bearer en desarrollo) con permisos de administración.
+        ELECTIONS_ADMINS: "admin"
     ports:
         - "8080:8080"

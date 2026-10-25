@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ktor)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room3)
 }
 
 group = "com.braiso_22.elections"
@@ -15,25 +13,31 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+// Composition root del monolito modular: arranca Ktor y monta los contextos.
 dependencies {
-    api(project(":core"))
+    implementation(project(":kernel"))
+    implementation(project(":shared"))
+    implementation(project(":partidos-infrastructure"))
+    implementation(project(":elecciones-infrastructure"))
+    implementation(project(":votacion-infrastructure"))
+    implementation(project(":resultados-infrastructure"))
+    implementation(project(":identidad-infrastructure"))
     implementation(libs.logback)
     implementation(libs.ktor.serverCore)
     implementation(libs.ktor.serverNetty)
     implementation(libs.ktor.serverContentNegotiation)
+    implementation(libs.ktor.serverStatusPages)
+    implementation(libs.ktor.serverCallLogging)
     implementation(libs.ktor.serverAuth)
     implementation(libs.ktor.serializationKotlinxJson)
-    implementation(libs.ktor.clientCore)
-    implementation(libs.ktor.clientCio)
-    implementation(libs.ktor.clientContentNegotiation)
-    implementation(libs.room3.runtime)
-    implementation(libs.sqlite.bundled)
-    ksp(libs.room3.compiler)
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.loggerSlf4j)
     testImplementation(libs.ktor.serverTestHost)
+    testImplementation(libs.ktor.clientContentNegotiation)
     testImplementation(libs.kotlin.testJunit)
-    testImplementation(libs.kotlinx.coroutinesTest)
 }
 
-room3 {
-    schemaDirectory("$projectDir/schemas")
+tasks.test {
+    // El test de arquitectura lee el código de los módulos core.
+    systemProperty("elections.rootDir", rootDir.absolutePath)
 }

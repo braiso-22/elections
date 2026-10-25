@@ -24,3 +24,6 @@ jmeter.log
 *.db-shm
 *.db-wal
 *.db.lck
+
+# Build de la web
+app/webApp/dist/

@@ -8,5 +8,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
-  server: { port: 8080 },
+  // El servidor Ktor ocupa el 8080: Vite sirve en el 5173 y le reenvía la API.
+  server: {
+    port: 5173,
+    proxy: { '/v1': 'http://localhost:8080' },
+  },
 });
